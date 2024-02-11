@@ -6,7 +6,7 @@ on:
 env:
   REGISTRY: https://dl.google.com/games/registry/unity/
   ARCHIVE: https://developers.google.com/unity/archive
-concurrency: upm-sync-package
+concurrency: ${{ github.workflow }}
 jobs:
   prepare:
     runs-on: ubuntu-latest
