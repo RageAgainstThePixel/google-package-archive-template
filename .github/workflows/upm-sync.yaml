@@ -22,7 +22,7 @@ jobs:
           echo "Package name: $PACKAGE_NAME"
           LAST_VERSION=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo 0.0.0)
           echo "Latest version: $LAST_VERSION"
-          VERSIONS=$(curl -sSf ${{ env.ARCHIVE }} | grep -oP '$PACKAGE_NAME-\K\d+\.\d+\.\d+(?=\.tgz)' | sort -V | uniq | awk -v last_version="$LAST_VERSION" '$0 > last_version' | tr '\n' ',')
+          VERSIONS=$(curl -sSf ${{ env.ARCHIVE }} | grep -oP "$PACKAGE_NAME-\K\d+\.\d+\.\d+(?=\.tgz)" | sort -V | uniq | awk -v last_version="$LAST_VERSION" '$0 > last_version' | tr '\n' ',')
           if [ -z "$VERSIONS" ]; then
             VERSIONS_JSON="[]"
           else
