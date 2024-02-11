@@ -22,9 +22,8 @@ jobs:
           set -e
           PACKAGE_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
           echo "Package name: $PACKAGE_NAME"
-          LAST_VERSION=$(git describe --tags `git rev-list --tags --max-count=1` 2>/dev/null || echo 0.0.0)
-          echo "Latest version: $LAST_VERSION"
-          VERSIONS=$(curl -sSf ${{ env.ARCHIVE }} | grep -oP "$PACKAGE_NAME-\K\d+\.\d+\.\d+(?=\.tgz)" | sort -V | uniq | awk -v last_version="$LAST_VERSION" '$0 > last_version' | tr '\n' ',')
+          GIT_VERSIONS=$(git tag | sort -Vu)
+          VERSIONS=$(curl -sSf ${{ env.ARCHIVE }} | grep -oP "$PACKAGE_NAME-\K\d+\.\d+\.\d+(?=\.tgz)" | sort -Vu | awk -v last_version="$LAST_VERSION" '$0 > last_version' | grep -vF "$GIT_VERSIONS" | tr '\n' ',')
           if [ -z "$VERSIONS" ]; then
             VERSIONS_JSON="[]"
           else
@@ -35,7 +34,7 @@ jobs:
   sync:
     needs: prepare
     runs-on: ubuntu-latest
-    if: ${{ needs.prepare.outputs.versions != '[]' }} # Skip job if no new versions
+    if: ${{ needs.prepare.outputs.versions != '[]' }}
     strategy:
       max-parallel: 1
       fail-fast: true
