@@ -14,6 +14,8 @@ jobs:
       versions: ${{ steps.archive.outputs.versions }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: get version(s)
         id: archive
         run: |
