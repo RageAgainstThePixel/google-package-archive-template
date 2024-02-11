@@ -27,7 +27,7 @@ jobs:
           if [ -z "$GIT_VERSIONS" ]; then
             VERSIONS=$ALL_VERSIONS
           else
-            VERSIONS=$(echo "$ALL_VERSIONS" | grep -vF "$GIT_VERSIONS")
+            VERSIONS=$(echo "$ALL_VERSIONS" | tr ',' '\n' | awk -v git_versions="$GIT_VERSIONS" '!index(git_versions,$0)' | tr '\n' ',')
           fi
           if [ -z "$VERSIONS" ]; then
             VERSIONS_JSON="[]"
