@@ -74,7 +74,7 @@ jobs:
 
           echo "::group:: commit version changes"
           git status -u
-          git add --a
+          git add -A
           git commit -m "$PACKAGE_NAME@${{ matrix.version }}"
           git tag "${{ matrix.version }}"
           git push origin main --tags
