@@ -6,4 +6,6 @@ on:
 concurrency: ${{ github.workflow }}
 jobs:
   sync:
+    permissions:
+      contents: write
     uses: RageAgainstThePixel/workflows/.github/workflows/google-package-upm-sync.yml@main
